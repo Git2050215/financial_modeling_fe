@@ -12,7 +12,17 @@ export default {
   },
 
   // 更改密码
-  resetPasswd(payload) {
-    return http.post('/user/reset/passwd', payload)
+  resetPassword(payload) {
+    return http.post('/user/reset/password', payload)
+  },
+
+  // 更改密码
+  getUserList(payload) {
+    return http.get(`/user/get/user/list?${new URLSearchParams(payload).toString()}`)
+  },
+
+  // 更改密码
+  resetType(payload) {
+    return http.post('/user/reset/type', payload)
   },
 }

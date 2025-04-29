@@ -1,11 +1,13 @@
 import axios from 'axios'
 import { message } from 'ant-design-vue'
 
+import enums from '@/utility/enums'
+import router from '@/router'
 import store from '@/store'
 
 const http = axios.create({
   baseURL: "http://127.0.0.1:1647", // 基础URL
-  timeout: 10000, // 超时时间
+  timeout: 60000, // 超时时间
   headers: {
     'Content-Type': 'application/json'
   }
@@ -21,7 +23,7 @@ http.interceptors.request.use(
     return config
   },
   error => {
-    message.error(`请求错误 ${error.message}`)
+    message.error(`请求错误: ${error.message}`)
     console.error(error)
     return Promise.reject(error)
   }
@@ -31,12 +33,16 @@ http.interceptors.request.use(
 http.interceptors.response.use(
   response => {
     const data = response.data
-    if (data.code !== 0) {
-      message.error(data.msg)
-      return Promise.reject(new Error(data.msg))
+    if (data.code !== enums.CODE.OK) {
+      if (data.data) {
+        message.error(`${data.message}: ${data.data}`)
+      } else {
+        message.error(data.message)
+      }
+      return Promise.reject(new Error(data.message))
     }
-    if (data.msg) {
-      message.success(data.msg)
+    if (data.message) {
+      message.success(data.message)
     }
     return data.data
   },
@@ -44,12 +50,15 @@ http.interceptors.response.use(
     switch (error.status) {
       case 401:
         message.error(error.response.data)
+        store.setToken('')
+        store.setUser(null)
+        router.push('/login')
         break
       case 403:
         message.error(error.response.data)
         break
       default:
-        message.error(`响应错误 ${error.message}`)
+        message.error(`响应错误[${error.status}]: ${error.message}`)
         break
     }
     console.error(error)

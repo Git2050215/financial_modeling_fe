@@ -5,31 +5,33 @@
         <a-col :span="6">
           <span :style="{ color: 'white', fontSize: '18px' }">基于大语言模型的金融自动化建模</span>
         </a-col>
+
         <a-col :span="12">
-          <a-menu v-model:selectedKeys="selectedKeys" @click="clickMenu" theme="dark" mode="horizontal">
-            <a-menu-item key="/home">首页</a-menu-item>
-            <a-menu-item key="/chat">聊天</a-menu-item>
-            <a-menu-item key="/user">账户</a-menu-item>
-          </a-menu>
+          <a-space :size="30">
+            <a @click="clickHome">首页</a>
+            <a @click="clickChat">聊天</a>
+            <a @click="clickUser">用户</a>
+            <a v-if="isLoginAdmin" @click="clickManage">管理</a>
+          </a-space>
         </a-col>
+
         <a-col :span="6">
           <div :style="{ float: 'right' }">
-            <a-space v-if="!store.token || store.user === null" size="large">
-              <a @click="clickLogin">登录</a>
-              <a @click="clickRegister">注册</a>
+            <a-space v-if="isLoginUser" size="large">
+              <span :style="{ color: '#f0f0f0' }">欢迎您！{{ store.user.name }}</span>
+              <a @click="clickLogout">登出</a>
             </a-space>
             <a-space v-else size="large">
-              <span :style="{ color: '#f0f0f0' }">
-                欢迎您！{{ store.user.name }}
-              </span>
-              <a @click="clickLogout">登出</a>
+              <a @click="clickLogin">登录</a>
+              <a @click="clickRegister">注册</a>
             </a-space>
           </div>
         </a-col>
       </a-row>
     </a-layout-header>
-    <a-layout-content :style="{ padding: '15px 15px', marginTop: '64px' }">
-      <div :style="{ background: '#fff', padding: '20px', minHeight: '500px' }">
+
+    <a-layout-content :style="{ padding: '15px 25px', marginTop: '64px' }">
+      <div :style="{ background: '#fff', padding: '20px', minHeight: '800px' }">
         <RouterView />
       </div>
     </a-layout-content>
@@ -37,28 +39,35 @@
 </template>
 
 <script setup>
-import { ref, watch } from 'vue'
-import { RouterView, useRoute, useRouter } from 'vue-router'
+import { computed } from 'vue'
+import { RouterView, useRouter } from 'vue-router'
 
 import api from '@/api'
+import enums from '@/utility/enums'
 import store from '@/store'
 
-const route = useRoute()
 const router = useRouter()
 
-const selectedKeys = ref([`/${route.path.split('/')[1]}`])
+const isLoginUser = computed(() => {
+  return store.token && store.user !== null
+})
 
-watch(
-  () => route.path,
-  (newPath) => {
-    selectedKeys.value = [`/${newPath.split('/')[1]}`]
-  }
-)
+const isLoginAdmin = computed(() => {
+  return store.token && store.user !== null && store.user.type === enums.USER_TYPE.ADMIN
+})
 
-function clickMenu({ item, key, keyPath }) {
-  router.push(key)
+function clickHome() {
+  router.push('/home')
 }
-
+function clickChat() {
+  router.push('/chat')
+}
+function clickUser() {
+  router.push('/user')
+}
+function clickManage() {
+  router.push('/manage')
+}
 function clickLogin() {
   router.push('/login')
 }
@@ -77,3 +86,9 @@ async function clickLogout() {
   router.push('/login')
 }
 </script>
+
+<style scoped>
+a {
+  color: #fff;
+}
+</style>

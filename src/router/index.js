@@ -1,6 +1,7 @@
 import { createWebHistory, createRouter } from 'vue-router'
 import { message } from 'ant-design-vue'
 
+import enums from '@/utility/enums'
 import store from '@/store'
 
 const routes = [
@@ -20,6 +21,13 @@ const routes = [
         component: () => import('../views/Register.vue'),
         meta: {
           title: '注册',
+        }
+      },
+      {
+        path: '/forgetPassword',
+        component: () => import('../views/ForgetPassword.vue'),
+        meta: {
+          title: '忘记密码',
         }
       },
       {
@@ -45,6 +53,37 @@ const routes = [
           requireLogin: true,
         }
       },
+      {
+        path: '/manage',
+        redirect: '/manage/user',
+        component: () => import('../views/manage/Manage.vue'),
+        children: [
+          {
+            path: '/manage/user',
+            component: () => import('../views/manage/User.vue'),
+            meta: {
+              title: '用户管理',
+              requireAdmin: true,
+            }
+          },
+          {
+            path: '/manage/model',
+            component: () => import('../views/manage/Model.vue'),
+            meta: {
+              title: '模型管理',
+              requireAdmin: true,
+            }
+          },
+          {
+            path: '/manage/model/detail',
+            component: () => import('../views/manage/ModelDetail.vue'),
+            meta: {
+              title: '模型详情',
+              requireAdmin: true,
+            }
+          },
+        ]
+      },
     ],
   },
 ]
@@ -54,13 +93,28 @@ const router = createRouter({
   routes,
 })
 
+function isAdmin() {
+  return store.token && store.user !== null && store.user.type === enums.USER_TYPE.ADMIN
+}
+
+function isLogin() {
+  return store.token && store.user !== null
+}
+
 router.beforeEach((to, from, next) => {
-  if (to.matched.some(record => record.meta.requireLogin) && (!store.token || store.user === null)) {
+  if (to.matched.some(record => record.meta.requireAdmin) && !isAdmin()) {
+    message.info('请先以管理员身份登录')
+    next({ path: '/login' })
+    return
+  }
+
+  if (to.matched.some(record => record.meta.requireLogin) && !isLogin()) {
     message.info('请先登录')
     next({ path: '/login' })
-  } else {
-    next()
+    return
   }
+
+  next()
 })
 
 export default router

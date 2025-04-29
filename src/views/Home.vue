@@ -1,7 +1,5 @@
 <template>
-  <a-space direction="vertical" :style="{ width: '100%' }">
-    <a-image width="100%" :src="homeBackground" :preview="false" />
-  </a-space>
+  <a-image width="100%" :src="homeBackground" :preview="false" />
 </template>
 
 <script setup>

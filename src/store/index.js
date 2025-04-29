@@ -3,11 +3,11 @@ import { reactive } from 'vue'
 const store = reactive({
   token: '',
   user: null,
-  setToken(_token) {
-    this.token = _token
+  setToken(token) {
+    this.token = token
   },
-  setUser(_user) {
-    this.user = _user
+  setUser(user) {
+    this.user = user
   },
 })
 
