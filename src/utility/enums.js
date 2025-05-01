@@ -40,6 +40,23 @@ const VALUE_TYPE_DESC = {
   [VALUE_TYPE.STRING]: '字符串',
 }
 
+const PARA_TYPE = {
+  MONTH: 0,
+  INPUT: 1,
+  MIDDLE: 2,
+  LAST_MIDDLE: 3,
+  ALL_MIDDLE: 4,
+  OUTPUT: 5,
+}
+const PARA_TYPE_DESC = {
+  [PARA_TYPE.MONTH]: '当前月份',
+  [PARA_TYPE.INPUT]: '输入参数',
+  [PARA_TYPE.MIDDLE]: '中间参数',
+  [PARA_TYPE.LAST_MIDDLE]: '上月中间参数',
+  [PARA_TYPE.ALL_MIDDLE]: '全部中间参数',
+  [PARA_TYPE.OUTPUT]: '结果参数',
+}
+
 const enums = {
   CODE,
   CODE_DESC,
@@ -49,6 +66,8 @@ const enums = {
   ATTR_TYPE_DESC,
   VALUE_TYPE,
   VALUE_TYPE_DESC,
+  PARA_TYPE,
+  PARA_TYPE_DESC,
 }
 
 export default enums

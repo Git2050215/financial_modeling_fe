@@ -1,5 +1,5 @@
 <template>
-  <a-descriptions title="用户信息">
+  <a-descriptions bordered title="用户信息">
     <a-descriptions-item label="UID">{{ store.user.id }}</a-descriptions-item>
     <a-descriptions-item label="用户名" :span="2">{{ store.user.name }}</a-descriptions-item>
     <a-descriptions-item label="用户类型">{{ userTypeDesc }}</a-descriptions-item>

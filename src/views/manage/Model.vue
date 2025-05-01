@@ -4,7 +4,7 @@
       @change="changeTable">
       <template #title>
         <a-space align="center" size="large">
-          <span style="font-size: 18px;">金融模型信息表</span>
+          <span style="font-size: 18px;">金融模型表</span>
 
           <a-input-search v-model:value="name" placeholder="搜索模型名" enter-button style="width: 300px"
             @search="searchName" />
