@@ -11,21 +11,21 @@ const routes = [
     children: [
       {
         path: '/login',
-        component: () => import('../views/Login.vue'),
+        component: () => import('../views/auth/Login.vue'),
         meta: {
           title: '登录',
         }
       },
       {
         path: '/register',
-        component: () => import('../views/Register.vue'),
+        component: () => import('../views/auth/Register.vue'),
         meta: {
           title: '注册',
         }
       },
       {
         path: '/forgetPassword',
-        component: () => import('../views/ForgetPassword.vue'),
+        component: () => import('../views/auth/ForgetPassword.vue'),
         meta: {
           title: '忘记密码',
         }
@@ -39,7 +39,15 @@ const routes = [
       },
       {
         path: '/chat',
-        component: () => import('../views/Chat.vue'),
+        component: () => import('../views/chat/Model.vue'),
+        meta: {
+          title: '对话',
+          requireLogin: true,
+        }
+      },
+      {
+        path: '/chat/content',
+        component: () => import('../views/chat/Content.vue'),
         meta: {
           title: '对话',
           requireLogin: true,
@@ -56,7 +64,7 @@ const routes = [
       {
         path: '/manage',
         redirect: '/manage/user',
-        component: () => import('../views/manage/Manage.vue'),
+        component: () => import('../views/manage/index.vue'),
         children: [
           {
             path: '/manage/user',
@@ -79,6 +87,14 @@ const routes = [
             component: () => import('../views/manage/ModelDetail.vue'),
             meta: {
               title: '模型详情',
+              requireAdmin: true,
+            }
+          },
+          {
+            path: '/manage/model/detail/attr',
+            component: () => import('../views/manage/AttrDetail.vue'),
+            meta: {
+              title: '属性详情',
               requireAdmin: true,
             }
           },

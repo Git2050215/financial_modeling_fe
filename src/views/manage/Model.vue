@@ -14,6 +14,7 @@
           </a-button>
         </a-space>
       </template>
+
       <template #bodyCell="{ column, record }">
         <template v-if="column.dataIndex === 'action'">
           <a-space>
